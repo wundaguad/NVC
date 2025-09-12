@@ -11,6 +11,7 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v4
     
@@ -34,42 +35,46 @@ jobs:
         name: windows-build
         path: dist/NominalwertRechner.exe
 
-  build-macos:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pillow customtkinter pyinstaller
-    
-    - name: Build macOS app
-      run: |
-        pyinstaller --windowed --name "NominalwertRechner" --icon="logo.png" --add-data "logo.png:." nominalwert_rechner.py
-        
-    - name: Create DMG
-      run: |
-        mkdir dmg_temp
-        cp -r dist/NominalwertRechner.app dmg_temp/
-        ln -sf /Applications dmg_temp/Applications
-        hdiutil create -volname "Nominalwert-Rechner" -srcfolder dmg_temp -ov -format UDZO NominalwertRechner-Mac.dmg
-    
-    - name: Upload macOS artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: macos-build
-        path: |
-          NominalwertRechner-Mac.dmg
-          dist/NominalwertRechner.app
+  # Mac build temporarily disabled due to Gatekeeper compatibility issues
+  # build-macos:
+  #   runs-on: macos-latest
+  #   if: github.event_name == 'push' && (contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main')
+  #   
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.11'
+  #   
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install pillow customtkinter pyinstaller
+  #   
+  #   - name: Build Mac app
+  #     run: |
+  #       pyinstaller --onefile --windowed --name=NominalwertRechner nominalwert_rechner.py
+  #       
+  #       # Create .app bundle
+  #       pyinstaller --windowed --name=NominalwertRechner nominalwert_rechner.py
+  #       
+  #       # Create DMG (simplified version)
+  #       mkdir -p dist/dmg
+  #       cp -r dist/NominalwertRechner.app dist/dmg/
+  #       hdiutil create -volname "NominalwertRechner" -srcfolder dist/dmg -ov -format UDZO dist/NominalwertRechner-Mac.dmg
+  #   
+  #   - name: Upload Mac artifacts
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: mac-build
+  #       path: |
+  #         dist/NominalwertRechner-Mac.dmg
+  #         dist/NominalwertRechner.app
 
   create-release:
-    needs: [build-windows, build-macos]
+    needs: [build-windows]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     

@@ -37,11 +37,19 @@ Created with ❤️ by **WUNDAGUAD** for our community
 3. Run the executable - no installation needed
 
 ### Mac
-1. Download `NominalwertRechner-Mac.dmg` from [Releases](../../releases)
-2. Open DMG and drag app to Applications folder
-3. **Security Warning**: macOS may show "unidentified developer" warning
-   - **Right-click** app → **"Open"** → **"Open"** (bypass Gatekeeper)
-   - Or: System Preferences → Security & Privacy → **"Open Anyway"**
+**Note**: Mac version currently under testing due to Gatekeeper compatibility issues.
+
+**Recommended**: Use Python version for Mac:
+```bash
+git clone https://github.com/wundaguad/NVC.git
+cd NVC
+pip3 install pillow customtkinter
+python3 nominalwert_rechner.py
+```
+
+**Alternative**: Download `NominalwertRechner-Mac.dmg` from [Releases](../../releases)
+- May require advanced security bypass methods
+- See `MAC_SECURITY_WARNING.md` for detailed instructions
 
 ### Alternative: Web Version
 For users who prefer browser-based tools, a web version is also available in the releases.
