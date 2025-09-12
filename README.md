@@ -24,7 +24,7 @@ Created with ❤️ by **WUNDAGUAD** for our community
 | Platform | Download | Size |
 |----------|----------|------|
 | 🪟 **Windows** | [NominalwertRechner.exe](../../releases/latest/download/NominalwertRechner.exe) | ~15MB |
-| 🍎 **Mac** | [NominalwertRechner-Mac.dmg](../../releases/latest/download/NominalwertRechner-Mac.dmg) | ~20MB |
+| 🌐 **Web** | [NominalwertRechner_Exact.html](../../releases/latest/download/NominalwertRechner_Exact.html) | ~50KB |
 | 🐧 **Linux** | [Source Code](../../archive/refs/heads/main.zip) | Run with Python |
 
 ## 🛠️ Installation
