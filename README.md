@@ -39,7 +39,9 @@ Created with ❤️ by **WUNDAGUAD** for our community
 ### Mac
 1. Download `NominalwertRechner-Mac.dmg` from [Releases](../../releases)
 2. Open DMG and drag app to Applications folder
-3. First run: Right-click app → "Open" (bypass Gatekeeper)
+3. **Security Warning**: macOS may show "unidentified developer" warning
+   - **Right-click** app → **"Open"** → **"Open"** (bypass Gatekeeper)
+   - Or: System Preferences → Security & Privacy → **"Open Anyway"**
 
 ### Alternative: Web Version
 For users who prefer browser-based tools, a web version is also available in the releases.
@@ -122,7 +124,9 @@ Effective Percentage = (Stop-Loss % + Fees) / 100
 - **File blocked**: Right-click .exe → Properties → "Unblock" → OK
 
 ### Mac Issues
-- **Gatekeeper**: Right-click → Open for first run
+- **"Cannot be opened because it is from an unidentified developer"**: Right-click app → "Open" → "Open"
+- **"App is damaged"**: Run `xattr -cr /Applications/NominalwertRechner.app` in Terminal
+- **Gatekeeper blocking**: System Preferences → Security & Privacy → "Open Anyway"
 - **M1/M2**: Native Apple Silicon support included
 
 ### Linux Issues
