@@ -8,6 +8,14 @@ Created with ❤️ by **WUNDAGUAD** for our community
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey.svg)](https://github.com/wundaguad/NVC/releases)
 
+## 📸 Screenshots
+
+### Desktop Version
+![Desktop Version](Desktop%20Version.png)
+
+### Web Version
+![Web Version](Web_Version.png)
+
 ## 🚀 Features
 
 - **Multi-Platform Support**: Windows, Mac, Linux
