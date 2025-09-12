@@ -6,11 +6,11 @@ Created with ❤️ by **WUNDAGUAD** for our community
 
 [![GitHub release](https://img.shields.io/github/release/wundaguad/NVC.svg)](https://github.com/wundaguad/NVC/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux%20%7C%20Web-lightgrey.svg)](https://github.com/wundaguad/NVC/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey.svg)](https://github.com/wundaguad/NVC/releases)
 
 ## 🚀 Features
 
-- **Multi-Platform Support**: Windows, Mac, Linux, Web
+- **Multi-Platform Support**: Windows, Mac, Linux
 - **Leverage Trading**: 1x to 125x leverage calculation
 - **Risk Management**: Precise stop-loss and take-profit calculations
 - **Multi-Language**: German and English interface
@@ -25,7 +25,6 @@ Created with ❤️ by **WUNDAGUAD** for our community
 |----------|----------|------|
 | 🪟 **Windows** | [NominalwertRechner.exe](../../releases/latest/download/NominalwertRechner.exe) | ~15MB |
 | 🍎 **Mac** | [NominalwertRechner-Mac.dmg](../../releases/latest/download/NominalwertRechner-Mac.dmg) | ~20MB |
-| 🌐 **Web** | [NominalwertRechner_Exact.html](../../releases/latest/download/NominalwertRechner_Exact.html) | ~50KB |
 | 🐧 **Linux** | [Source Code](../../archive/refs/heads/main.zip) | Run with Python |
 
 ## 🛠️ Installation
@@ -40,10 +39,8 @@ Created with ❤️ by **WUNDAGUAD** for our community
 2. Open DMG and drag app to Applications folder
 3. First run: Right-click app → "Open" (bypass Gatekeeper)
 
-### Web Version (All Platforms)
-1. Download `NominalwertRechner_Exact.html`
-2. Open in any web browser
-3. Works offline - bookmark for easy access
+### Alternative: Web Version
+For users who prefer browser-based tools, a web version is also available in the releases.
 
 ### Linux / Source Code
 ```bash
