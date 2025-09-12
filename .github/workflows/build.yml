@@ -88,11 +88,6 @@ jobs:
         name: windows-build
         path: ./builds/windows/
     
-    - name: Download macOS build
-      uses: actions/download-artifact@v4
-      with:
-        name: macos-build
-        path: ./builds/macos/
     
     - name: Prepare web version
       run: |
@@ -104,7 +99,6 @@ jobs:
       with:
         files: |
           ./builds/windows/NominalwertRechner.exe
-          ./builds/macos/NominalwertRechner-Mac.dmg
           ./builds/web/NominalwertRechner_Exact.html
           README_GitHub.md
         body: |
@@ -114,9 +108,8 @@ jobs:
           
           ### 📥 Downloads:
           - **Windows**: `NominalwertRechner.exe` - Ready to run executable
-          - **Mac**: `NominalwertRechner-Mac.dmg` - Drag & drop installer  
           - **Web**: `NominalwertRechner_Exact.html` - Works in any browser
-          - **Linux**: Download source code and run with Python 3
+          - **Mac/Linux**: Use Python version (see README for instructions)
           
           ### 🚀 Features:
           - Professional leverage trading calculator (1x-125x)
@@ -129,8 +122,8 @@ jobs:
           
           ### 📋 Installation:
           - **Windows**: Download .exe and run (may show security warning - click "Run anyway")
-          - **Mac**: Download .dmg, drag to Applications, right-click → Open first time
           - **Web**: Download .html file and open in browser
+          - **Mac/Linux**: Clone repository and run with Python 3
           
           Created with ❤️ by **WUNDAGUAD** for our trading community
         draft: false
