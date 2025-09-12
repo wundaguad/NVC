@@ -1,0 +1,133 @@
+name: Build Multi-Platform Releases
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build Windows executable
+      run: |
+        pyinstaller --onefile --windowed --name "NominalwertRechner" --icon="logo.png" --add-data "logo.png;." nominalwert_rechner.py
+    
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-build
+        path: dist/NominalwertRechner.exe
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build macOS app
+      run: |
+        pyinstaller --windowed --name "NominalwertRechner" --icon="logo.png" --add-data "logo.png:." nominalwert_rechner.py
+        
+    - name: Create DMG
+      run: |
+        mkdir dmg_temp
+        cp -r dist/NominalwertRechner.app dmg_temp/
+        ln -sf /Applications dmg_temp/Applications
+        hdiutil create -volname "Nominalwert-Rechner" -srcfolder dmg_temp -ov -format UDZO NominalwertRechner-Mac.dmg
+    
+    - name: Upload macOS artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: macos-build
+        path: |
+          NominalwertRechner-Mac.dmg
+          dist/NominalwertRechner.app
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download Windows build
+      uses: actions/download-artifact@v3
+      with:
+        name: windows-build
+        path: ./builds/windows/
+    
+    - name: Download macOS build
+      uses: actions/download-artifact@v3
+      with:
+        name: macos-build
+        path: ./builds/macos/
+    
+    - name: Prepare web version
+      run: |
+        mkdir -p ./builds/web/
+        cp NominalwertRechner_Exact.html ./builds/web/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./builds/windows/NominalwertRechner.exe
+          ./builds/macos/NominalwertRechner-Mac.dmg
+          ./builds/web/NominalwertRechner_Exact.html
+          README_GitHub.md
+        body: |
+          ## 🧮 Nominalwert-Rechner Release
+          
+          **Multi-platform trading position calculator with leverage support**
+          
+          ### 📥 Downloads:
+          - **Windows**: `NominalwertRechner.exe` - Ready to run executable
+          - **Mac**: `NominalwertRechner-Mac.dmg` - Drag & drop installer  
+          - **Web**: `NominalwertRechner_Exact.html` - Works in any browser
+          - **Linux**: Download source code and run with Python 3
+          
+          ### 🚀 Features:
+          - Professional leverage trading calculator (1x-125x)
+          - Multi-language support (German/English)
+          - Dark theme trading interface
+          - Risk management with stop-loss/take-profit
+          - Fee calculation (maker/taker)
+          - Copy-to-clipboard functionality
+          - Offline operation
+          
+          ### 📋 Installation:
+          - **Windows**: Download .exe and run (may show security warning - click "Run anyway")
+          - **Mac**: Download .dmg, drag to Applications, right-click → Open first time
+          - **Web**: Download .html file and open in browser
+          
+          Created with ❤️ by **WUNDAGUAD** for our trading community
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
