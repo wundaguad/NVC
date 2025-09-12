@@ -31,8 +31,10 @@ Created with ❤️ by **WUNDAGUAD** for our community
 
 ### Windows
 1. Download `NominalwertRechner.exe` from [Releases](../../releases)
-2. Run the executable - no installation needed
-3. Windows may show security warning - click "More info" → "Run anyway"
+2. **Security Warning**: Windows may show "Windows protected your PC"
+   - Click **"More info"** → **"Run anyway"**
+   - Or: Right-click .exe → Properties → **"Unblock"** → OK
+3. Run the executable - no installation needed
 
 ### Mac
 1. Download `NominalwertRechner-Mac.dmg` from [Releases](../../releases)
@@ -115,8 +117,9 @@ Effective Percentage = (Stop-Loss % + Fees) / 100
 ## 🐛 Troubleshooting
 
 ### Windows Issues
-- **Security Warning**: Normal for unsigned executables
-- **Antivirus**: May flag as false positive - add to exceptions
+- **"Windows protected your PC"**: Click "More info" → "Run anyway"
+- **Antivirus blocking**: Add to antivirus exceptions if needed
+- **File blocked**: Right-click .exe → Properties → "Unblock" → OK
 
 ### Mac Issues
 - **Gatekeeper**: Right-click → Open for first run
