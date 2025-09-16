@@ -787,32 +787,27 @@
             
             console.log('Parsing:', str); // Debug log
             
-            // Smart number format detection regardless of current setting
+            // Handle different number formats
             if (str.includes(',') && str.includes('.')) {
-                // Check position to determine format
                 const commaPos = str.lastIndexOf(',');
                 const dotPos = str.lastIndexOf('.');
-                console.log('Comma pos:', commaPos, 'Dot pos:', dotPos); // Debug log
                 
                 if (commaPos > dotPos) {
-                    // German format: 4.435,01 -> dots=thousands, comma=decimal
+                    // German: 4.435,01 -> 4435.01
                     str = str.replace(/\./g, '').replace(',', '.');
-                    console.log('German format result:', str); // Debug log
                 } else {
-                    // US format: 115,130.1 -> commas=thousands, dot=decimal
+                    // US: 4,435.01 -> 4435.01  
                     str = str.replace(/,/g, '');
-                    console.log('US format result:', str); // Debug log
                 }
             } else if (str.includes(',')) {
-                // Only comma present
-                if (currentNumberFormat === 'german') {
-                    // German: treat comma as decimal separator
+                // Only comma - check if it's likely decimal or thousands
+                const parts = str.split(',');
+                if (parts.length === 2 && parts[1].length <= 3) {
+                    // Likely decimal: 123,45 or 1234,5
                     str = str.replace(',', '.');
-                    console.log('German comma only result:', str); // Debug log
                 } else {
-                    // US: treat comma as thousands separator
+                    // Likely thousands: 1,234 or 12,345
                     str = str.replace(/,/g, '');
-                    console.log('US comma only result:', str); // Debug log
                 }
             }
             // If only dots or no separators, leave as-is
