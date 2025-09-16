@@ -823,17 +823,23 @@
         }
 
         function formatNumber(value, decimals = 2) {
+            console.log('Formatting value:', value, 'decimals:', decimals, 'format:', currentNumberFormat); // Debug log
+            
+            let result;
             if (currentNumberFormat === 'german') {
-                return value.toLocaleString('de-DE', {
+                result = value.toLocaleString('de-DE', {
                     minimumFractionDigits: decimals,
                     maximumFractionDigits: decimals
                 });
             } else {
-                return value.toLocaleString('en-US', {
+                result = value.toLocaleString('en-US', {
                     minimumFractionDigits: decimals,
                     maximumFractionDigits: decimals
                 });
             }
+            
+            console.log('Formatted result:', result); // Debug log
+            return result;
         }
 
         // UI Functions
