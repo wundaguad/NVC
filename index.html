@@ -473,8 +473,8 @@
                     </div>
                     
                     <div class="input-row">
-                        <div class="input-label" data-text="entry_price">Einstiegskurs:</div>
-                        <input type="number" id="entryPrice" step="0.01" placeholder="z.B. 50000" onkeypress="handleEnter(event)">
+                        <label for="entryPrice">📈 <span data-text="entry_price">Einstiegskurs</span>:</label>
+                        <input type="text" id="entryPrice" placeholder="z.B. 4435.01" onkeypress="handleEnter(event)" oninput="formatInputNumber(this)" onpaste="setTimeout(() => formatInputNumber(this), 10)">
                     </div>
                     
                     <div class="input-row">
@@ -783,35 +783,19 @@
         // Number formatting functions
         function parseNumber(str) {
             if (!str) return 0;
-            str = str.toString().trim();
             
-            if (currentNumberFormat === 'german') {
-                // German: 115.327,2 -> 115327.2
-                if (str.includes(',') && str.includes('.')) {
-                    str = str.replace(/\./g, '').replace(',', '.');
-                } else if (str.includes(',')) {
-                    str = str.replace(',', '.');
-                }
-            } else {
-                // US: 115,327.2 -> 115327.2
-                str = str.replace(/,/g, '');
-            }
+            // Convert to string and clean
+            const cleanStr = str.toString().trim().replace(/\s/g, '');
             
-            return parseFloat(str) || 0;
+            // For numbers like 4,449.62 - always treat comma as thousands separator when dot follows
+            const result = parseFloat(cleanStr.replace(/,/g, ''));
+            
+            return isNaN(result) ? 0 : result;
         }
 
         function formatNumber(value, decimals = 2) {
-            if (currentNumberFormat === 'german') {
-                return value.toLocaleString('de-DE', {
-                    minimumFractionDigits: decimals,
-                    maximumFractionDigits: decimals
-                });
-            } else {
-                return value.toLocaleString('en-US', {
-                    minimumFractionDigits: decimals,
-                    maximumFractionDigits: decimals
-                });
-            }
+            // Always format as plain number with dots for decimals
+            return value.toFixed(decimals);
         }
 
         // UI Functions
@@ -881,6 +865,19 @@
             }
         }
 
+        function formatInputNumber(input) {
+            let value = input.value;
+            if (!value) return;
+            
+            // Remove all commas first
+            let cleaned = value.replace(/,/g, '');
+            
+            // If it's a valid number, update the input
+            if (!isNaN(parseFloat(cleaned))) {
+                input.value = cleaned;
+            }
+        }
+
         function resetInputs() {
             document.getElementById('entryPrice').value = '';
             document.getElementById('maxLoss').value = '10.00';
@@ -898,6 +895,7 @@
 
         // Main calculation function
         function calculate() {
+            console.log('Calculate function called'); // Debug
             try {
                 const direction = document.querySelector('input[name="direction"]:checked').value;
                 const entryPrice = parseNumber(document.getElementById('entryPrice').value);
@@ -1001,7 +999,11 @@
         // Copy to clipboard with feedback
         function copyResult(elementId) {
             const element = document.getElementById(elementId);
-            const text = element.textContent;
+            let text = element.textContent;
+            
+            // Parse and reformat the number to ensure correct format
+            const numValue = parseNumber(text);
+            text = numValue.toString();
             
             navigator.clipboard.writeText(text).then(() => {
                 const button = element.nextElementSibling;
@@ -1021,8 +1023,9 @@
             });
         }
 
-        // Initialize app
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded - testing console'); // Test console
             loadSettings();
             updateDirection();
             updateLeverage();
