@@ -783,37 +783,24 @@
         // Number formatting functions
         function parseNumber(str) {
             if (!str) return 0;
-            str = str.toString().trim();
+            str = str.toString().trim().replace(/\s/g, '');
             
-            // Remove all spaces first
-            str = str.replace(/\s/g, '');
-            
-            // Handle different number formats
+            // Simple approach: if both comma and dot exist, remove commas (US format)
             if (str.includes(',') && str.includes('.')) {
-                const commaPos = str.lastIndexOf(',');
-                const dotPos = str.lastIndexOf('.');
+                return parseFloat(str.replace(/,/g, '')) || 0;
+            }
+            
+            // If only comma, check decimal vs thousands by position and digits
+            if (str.includes(',')) {
+                const lastCommaPos = str.lastIndexOf(',');
+                const afterComma = str.substring(lastCommaPos + 1);
                 
-                if (commaPos > dotPos) {
-                    // German: 4.449,62 -> 4449.62
-                    str = str.replace(/\./g, '').replace(',', '.');
+                // If 1-2 digits after last comma, it's decimal
+                if (afterComma.length <= 2) {
+                    return parseFloat(str.replace(',', '.')) || 0;
                 } else {
-                    // US: 4,449.62 -> 4449.62  
-                    str = str.replace(/,/g, '');
-                }
-            } else if (str.includes(',')) {
-                // Only comma present - need to determine if decimal or thousands
-                const parts = str.split(',');
-                
-                // If last part has exactly 3 digits and looks like thousands: 1,234
-                if (parts.length === 2 && parts[1].length === 3 && parseInt(parts[0]) >= 1) {
-                    // Likely thousands separator: 4,449 -> 4449
-                    str = str.replace(/,/g, '');
-                } else if (parts.length === 2 && parts[1].length <= 2) {
-                    // Likely decimal separator: 123,45 -> 123.45
-                    str = str.replace(',', '.');
-                } else {
-                    // Multiple commas or unclear - treat as thousands
-                    str = str.replace(/,/g, '');
+                    // Otherwise it's thousands separator
+                    return parseFloat(str.replace(/,/g, '')) || 0;
                 }
             }
             
