@@ -794,20 +794,25 @@
                 const dotPos = str.lastIndexOf('.');
                 
                 if (commaPos > dotPos) {
-                    // German: 4.435,01 -> 4435.01
+                    // German: 4.449,62 -> 4449.62
                     str = str.replace(/\./g, '').replace(',', '.');
                 } else {
-                    // US: 4,435.01 -> 4435.01  
+                    // US: 4,449.62 -> 4449.62  
                     str = str.replace(/,/g, '');
                 }
             } else if (str.includes(',')) {
-                // Only comma present
+                // Only comma present - need to determine if decimal or thousands
                 const parts = str.split(',');
-                if (parts.length === 2 && parts[1].length <= 2) {
-                    // Decimal separator: 123,45
+                
+                // If last part has exactly 3 digits and looks like thousands: 1,234
+                if (parts.length === 2 && parts[1].length === 3 && parseInt(parts[0]) >= 1) {
+                    // Likely thousands separator: 4,449 -> 4449
+                    str = str.replace(/,/g, '');
+                } else if (parts.length === 2 && parts[1].length <= 2) {
+                    // Likely decimal separator: 123,45 -> 123.45
                     str = str.replace(',', '.');
                 } else {
-                    // Thousands separator: 1,234
+                    // Multiple commas or unclear - treat as thousands
                     str = str.replace(/,/g, '');
                 }
             }
