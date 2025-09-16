@@ -1008,7 +1008,11 @@
         // Copy to clipboard with feedback
         function copyResult(elementId) {
             const element = document.getElementById(elementId);
-            const text = element.textContent;
+            let text = element.textContent;
+            
+            // Parse and reformat the number to ensure correct format
+            const numValue = parseNumber(text);
+            text = numValue.toString();
             
             navigator.clipboard.writeText(text).then(() => {
                 const button = element.nextElementSibling;
