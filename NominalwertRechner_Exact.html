@@ -783,28 +783,14 @@
         // Number formatting functions
         function parseNumber(str) {
             if (!str) return 0;
-            str = str.toString().trim().replace(/\s/g, '');
             
-            // Simple approach: if both comma and dot exist, remove commas (US format)
-            if (str.includes(',') && str.includes('.')) {
-                return parseFloat(str.replace(/,/g, '')) || 0;
-            }
+            // Convert to string and clean
+            const cleanStr = str.toString().trim().replace(/\s/g, '');
             
-            // If only comma, check decimal vs thousands by position and digits
-            if (str.includes(',')) {
-                const lastCommaPos = str.lastIndexOf(',');
-                const afterComma = str.substring(lastCommaPos + 1);
-                
-                // If 1-2 digits after last comma, it's decimal
-                if (afterComma.length <= 2) {
-                    return parseFloat(str.replace(',', '.')) || 0;
-                } else {
-                    // Otherwise it's thousands separator
-                    return parseFloat(str.replace(/,/g, '')) || 0;
-                }
-            }
+            // For numbers like 4,449.62 - always treat comma as thousands separator when dot follows
+            const result = parseFloat(cleanStr.replace(/,/g, ''));
             
-            return parseFloat(str) || 0;
+            return isNaN(result) ? 0 : result;
         }
 
         function formatNumber(value, decimals = 2) {
