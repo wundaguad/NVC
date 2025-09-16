@@ -785,27 +785,29 @@
             if (!str) return 0;
             str = str.toString().trim();
             
-            if (currentNumberFormat === 'german') {
-                // German: 4.435,01 -> 4435.01
-                if (str.includes(',') && str.includes('.')) {
-                    // Check if comma is after dot (4.435,01) - German format
-                    const commaPos = str.lastIndexOf(',');
-                    const dotPos = str.lastIndexOf('.');
-                    if (commaPos > dotPos) {
-                        // German format: dots are thousands separators, comma is decimal
-                        str = str.replace(/\./g, '').replace(',', '.');
-                    } else {
-                        // US format: commas are thousands separators, dot is decimal
-                        str = str.replace(/,/g, '');
-                    }
-                } else if (str.includes(',')) {
-                    // Only comma present - treat as decimal separator in German format
-                    str = str.replace(',', '.');
+            // Smart number format detection regardless of current setting
+            if (str.includes(',') && str.includes('.')) {
+                // Check position to determine format
+                const commaPos = str.lastIndexOf(',');
+                const dotPos = str.lastIndexOf('.');
+                if (commaPos > dotPos) {
+                    // German format: 4.435,01 -> dots=thousands, comma=decimal
+                    str = str.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // US format: 115,130.1 -> commas=thousands, dot=decimal
+                    str = str.replace(/,/g, '');
                 }
-            } else {
-                // US: 115,327.2 -> 115327.2
-                str = str.replace(/,/g, '');
+            } else if (str.includes(',')) {
+                // Only comma present
+                if (currentNumberFormat === 'german') {
+                    // German: treat comma as decimal separator
+                    str = str.replace(',', '.');
+                } else {
+                    // US: treat comma as thousands separator
+                    str = str.replace(/,/g, '');
+                }
             }
+            // If only dots or no separators, leave as-is
             
             return parseFloat(str) || 0;
         }
