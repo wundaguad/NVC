@@ -786,10 +786,20 @@
             str = str.toString().trim();
             
             if (currentNumberFormat === 'german') {
-                // German: 115.327,2 -> 115327.2
+                // German: 4.435,01 -> 4435.01
                 if (str.includes(',') && str.includes('.')) {
-                    str = str.replace(/\./g, '').replace(',', '.');
+                    // Check if comma is after dot (4.435,01) - German format
+                    const commaPos = str.lastIndexOf(',');
+                    const dotPos = str.lastIndexOf('.');
+                    if (commaPos > dotPos) {
+                        // German format: dots are thousands separators, comma is decimal
+                        str = str.replace(/\./g, '').replace(',', '.');
+                    } else {
+                        // US format: commas are thousands separators, dot is decimal
+                        str = str.replace(/,/g, '');
+                    }
                 } else if (str.includes(',')) {
+                    // Only comma present - treat as decimal separator in German format
                     str = str.replace(',', '.');
                 }
             } else {
