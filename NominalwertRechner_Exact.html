@@ -473,8 +473,8 @@
                     </div>
                     
                     <div class="input-row">
-                        <div class="input-label" data-text="entry_price">Einstiegskurs:</div>
-                        <input type="number" id="entryPrice" step="0.01" placeholder="z.B. 50000" onkeypress="handleEnter(event)">
+                        <label for="entryPrice">📈 <span data-text="entry_price">Einstiegskurs</span>:</label>
+                        <input type="text" id="entryPrice" placeholder="z.B. 4435.01" onkeypress="handleEnter(event)" oninput="formatInputNumber(this)" onpaste="setTimeout(() => formatInputNumber(this), 10)">
                     </div>
                     
                     <div class="input-row">
@@ -862,6 +862,19 @@
         function handleEnter(event) {
             if (event.key === 'Enter') {
                 calculate();
+            }
+        }
+
+        function formatInputNumber(input) {
+            let value = input.value;
+            if (!value) return;
+            
+            // Remove all commas first
+            let cleaned = value.replace(/,/g, '');
+            
+            // If it's a valid number, update the input
+            if (!isNaN(parseFloat(cleaned))) {
+                input.value = cleaned;
             }
         }
 
