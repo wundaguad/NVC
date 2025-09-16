@@ -926,6 +926,7 @@
 
         // Main calculation function
         function calculate() {
+            console.log('Calculate function called'); // Debug
             try {
                 const direction = document.querySelector('input[name="direction"]:checked').value;
                 const entryPrice = parseNumber(document.getElementById('entryPrice').value);
@@ -1049,8 +1050,9 @@
             });
         }
 
-        // Initialize app
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded - testing console'); // Test console
             loadSettings();
             updateDirection();
             updateLeverage();
