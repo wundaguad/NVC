@@ -785,31 +785,41 @@
             if (!str) return 0;
             str = str.toString().trim();
             
+            console.log('Parsing:', str); // Debug log
+            
             // Smart number format detection regardless of current setting
             if (str.includes(',') && str.includes('.')) {
                 // Check position to determine format
                 const commaPos = str.lastIndexOf(',');
                 const dotPos = str.lastIndexOf('.');
+                console.log('Comma pos:', commaPos, 'Dot pos:', dotPos); // Debug log
+                
                 if (commaPos > dotPos) {
                     // German format: 4.435,01 -> dots=thousands, comma=decimal
                     str = str.replace(/\./g, '').replace(',', '.');
+                    console.log('German format result:', str); // Debug log
                 } else {
                     // US format: 115,130.1 -> commas=thousands, dot=decimal
                     str = str.replace(/,/g, '');
+                    console.log('US format result:', str); // Debug log
                 }
             } else if (str.includes(',')) {
                 // Only comma present
                 if (currentNumberFormat === 'german') {
                     // German: treat comma as decimal separator
                     str = str.replace(',', '.');
+                    console.log('German comma only result:', str); // Debug log
                 } else {
                     // US: treat comma as thousands separator
                     str = str.replace(/,/g, '');
+                    console.log('US comma only result:', str); // Debug log
                 }
             }
             // If only dots or no separators, leave as-is
             
-            return parseFloat(str) || 0;
+            const result = parseFloat(str) || 0;
+            console.log('Final parsed result:', result); // Debug log
+            return result;
         }
 
         function formatNumber(value, decimals = 2) {
